@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>One Headline</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Headline" />
+  <meta property="og:description" content="Shows exactly one headline per hour. Swipe to dismiss and you'll see nothing until the next hour. Optional API key support." />
+  <meta property="og:image" content="https://example.com/assets/hero.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/" />
+
+  <!-- Farcaster Mini App -->
+  <meta name="fc:miniapp" content="{&quot;version&quot;:&quot;1&quot;,&quot;imageUrl&quot;:&quot;https://example.com/assets/embed-3x2.png&quot;,&quot;button&quot;:{&quot;title&quot;:&quot;Open&quot;,&quot;action&quot;:{&quot;type&quot;:&quot;launch_frame&quot;,&quot;url&quot;:&quot;https://example.com/&quot;}},&quot;splashImageUrl&quot;:&quot;https://example.com/assets/splash.png&quot;,&quot;splashBackgroundColor&quot;:&quot;#020617&quot;}" />
+
+  <!-- Backwards compatible Frame -->
+  <meta name="fc:frame" content="vNext" />
+  <meta name="fc:frame:image" content="https://example.com/assets/embed-3x2.png" />
+  <meta name="fc:frame:button:1" content="Open" />
+  <meta name="fc:frame:button:1:action" content="launch_frame" />
+  <meta name="fc:frame:button:1:target" content="https://example.com/" />
+  <meta name="fc:frame:splash_image" content="https://example.com/assets/splash.png" />
+  <meta name="fc:frame:splash_background_color" content="#020617" />
+
+  <style>
+    :root {
+      --paper: #FCF9F2;
+      --ink: #0A0A0C;
+      --muted: rgba(10,10,12,.62);
+      --orange: #FF5C00;
+      --radius: 22px;
+      --shadow: rgba(10,10,12,.10);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    #app {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      box-sizing: border-box;
+    }
+    .wrap {
+      width: min(560px, 100%);
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0 14px;
+      border-bottom: 3px solid rgba(10,10,12,.12);
+      margin-bottom: 14px;
+    }
+    .name {
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .sub {
+      margin-top: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .pill {
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .18em;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(10,10,12,.14);
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 12px 30px var(--shadow);
+      user-select: none;
+    }
+    .pill.mini {
+      border-color: rgba(255,92,0,.35);
+      box-shadow: 0 0 0 6px rgba(255,92,0,.10) inset;
+    }
+
+    .card {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(10,10,12,.10);
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      box-shadow: 0 18px 50px var(--shadow);
+      touch-action: pan-y;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(10,10,12,.10);
+      background: rgba(252,249,242,.85);
+      font-weight: 900;
+      letter-spacing: .14em;
+      font-size: 12px;
+      color: rgba(10,10,12,.70);
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--orange);
+      box-shadow: 0 0 0 6px rgba(255,92,0,.12);
+    }
+
+    .headline {
+      margin-top: 16px;
+      font-size: 40px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+    }
+    @media (max-width: 420px) {
+      .headline { font-size: 34px; }
+    }
+
+    .metaRow {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .meta {
+      font-size: 13px;
+      font-weight: 750;
+      color: var(--muted);
+    }
+    .link {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      color: var(--orange);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .divider {
+      height: 6px;
+      background: var(--orange);
+      border-radius: 999px;
+      margin: 16px 0 14px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .apikey {
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(10,10,12,.12);
+      outline: none;
+      font-weight: 750;
+      background: rgba(252,249,242,.72);
+    }
+    .btn {
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(10,10,12,.12);
+      background: var(--orange);
+      color: #fff;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .ghost {
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(10,10,12,.12);
+      background: rgba(255,255,255,.75);
+      font-weight: 900;
+      color: rgba(10,10,12,.78);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .ghost.big {
+      padding: 14px 16px;
+      border-radius: 999px;
+    }
+
+    .hint {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chip {
+      font-size: 12px;
+      font-weight: 850;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(10,10,12,.18);
+      background: rgba(252,249,242,.70);
+      color: rgba(10,10,12,.72);
+    }
+
+    .empty {
+      display: none;
+      border: 1px solid rgba(10,10,12,.10);
+      background: rgba(255,255,255,.75);
+      border-radius: var(--radius);
+      padding: 22px 16px;
+      box-shadow: 0 18px 50px var(--shadow);
+      text-align: center;
+    }
+    .emptyTitle {
+      font-size: 22px;
+      font-weight: 950;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .emptySub {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 750;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .wrap.pop .stamp {
+      animation: pop .35s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
