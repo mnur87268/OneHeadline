@@ -1,0 +1,31 @@
+{
+  "accountAssociation": {
+    "header": "TODO_REPLACE_BASE64_HEADER",
+    "payload": "TODO_REPLACE_BASE64_PAYLOAD",
+    "signature": "TODO_REPLACE_BASE64_SIGNATURE"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Headline",
+    "homeUrl": "https://example.com/",
+    "iconUrl": "https://example.com/assets/icon.png",
+    "splashImageUrl": "https://example.com/assets/splash.png",
+    "splashBackgroundColor": "#020617",
+    "subtitle": "Anti-doomscroll news",
+    "description": "Shows exactly one headline per hour. Swipe to dismiss and you'll see nothing until the next hour. Optional API key support.",
+    "primaryCategory": "news-media",
+    "tags": [
+      "fun",
+      "simple",
+      "utility"
+    ],
+    "heroImageUrl": "https://example.com/assets/hero.png",
+    "ogTitle": "Headline",
+    "ogDescription": "Shows exactly one headline per hour. Swipe to dismiss and you'll see nothing until the next hour. Optional API key support.",
+    "ogImageUrl": "https://example.com/assets/hero.png",
+    "screenshotUrls": [
+      "https://example.com/assets/hero.png"
+    ],
+    "noindex": true
+  }
+}
